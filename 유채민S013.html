@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>세빛학원 주간 리포트 - 유채민</title>
+    <!-- Google Fonts: Noto Sans KR, Roboto Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* [테마 설정] - 세빛학원 테마 (Dark & Neon) */
+        :root {
+            --bg-color: #050505;
+            --card-bg: #121214;
+            --text-main: #f1f5f9;
+            --text-sub: #94a3b8;
+            
+            /* 포인트 컬러 */
+            --brand-main: #3b82f6;    /* 세빛 블루 */
+            --accent-test: #8b5cf6;   /* 테스트 (보라) */
+            --accent-class: #10b981;  /* 수업 (초록) */
+            --accent-warn: #ef4444;   /* 경고 (빨강) */
+
+            /* 신호등 상태 컬러 */
+            --status-blue: #3b82f6;   /* 우수 */
+            --status-orange: #f97316; /* 보통 */
+            --status-red: #ef4444;    /* 위험 */
+            
+            --timeline-line: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding-bottom: 60px;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* 배경 노이즈 효과 */
+        .noise-overlay {
+            position: fixed; inset: 0; pointer-events: none; opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            z-index: -1;
+        }
+
+        /* [헤더] */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            z-index: 100;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .brand { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; color: white; font-style: italic; }
+        .brand span { color: var(--brand-main); }
+        .sub-brand { font-size: 10px; color: var(--text-sub); display: block; letter-spacing: 2px; margin-bottom: 2px; font-weight: 700; }
+        .user-badge {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 12px; font-weight: 700; color: var(--text-main);
+        }
+
+        /* [메인] */
+        main { max-width: 500px; margin: 0 auto; padding: 20px; opacity: 0; animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+        /* [프로필 섹션] */
+        .profile-sec { margin-top: 10px; margin-bottom: 25px; }
+        .student-name { font-size: 32px; font-weight: 900; line-height: 1.2; color: white; display: flex; align-items: center; gap: 10px; letter-spacing: -0.02em; }
+        .school-badge { font-size: 13px; font-weight: 600; color: #cbd5e1; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); vertical-align: middle; }
+        .date-info { font-size: 14px; color: var(--text-sub); margin-top: 8px; display: flex; align-items: center; gap: 8px; font-weight: 400; }
+        .highlight-text { color: var(--brand-main); font-weight: 700; }
+
+        /* [카드 공통] */
+        .card {
+            background: var(--card-bg); border-radius: 20px; padding: 24px; margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.7);
+            position: relative; overflow: hidden;
+        }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .card-icon-box { 
+            width: 32px; height: 32px; border-radius: 10px; 
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.05); color: white;
+        }
+        .card-title { font-size: 17px; font-weight: 800; color: #f1f5f9; letter-spacing: -0.02em; }
+
+        /* [타임라인 - 주간 학습 기록] */
+        .timeline { padding-left: 8px; }
+        .timeline-item { position: relative; padding-left: 28px; margin-bottom: 24px; border-left: 2px solid var(--timeline-line); }
+        .timeline-item:last-child { margin-bottom: 0; border-left-color: transparent; }
+        
+        .timeline-dot { 
+            position: absolute; left: -7px; top: 0px; width: 12px; height: 12px; border-radius: 50%; 
+            background: var(--bg-color); border: 2px solid var(--text-sub);
+            z-index: 2;
+        }
+        .log-date { font-size: 12px; font-weight: 700; color: var(--brand-main); margin-bottom: 4px; display: block;}
+        .log-title { font-size: 15px; color: white; font-weight: 700; margin-bottom: 2px; }
+        .log-desc { font-size: 13px; color: #94a3b8; font-weight: 400; }
+
+        /* [테스트 결과 카드] */
+        .test-card { border-left: 4px solid var(--accent-test); background: linear-gradient(145deg, #15151a, #0f0f11); }
+        .test-score-area { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 15px; }
+        .score-big { font-size: 36px; font-weight: 900; font-family: 'Roboto Mono', monospace; line-height: 1; }
+        .score-total { font-size: 14px; color: #64748b; font-weight: 600; margin-left: 4px; }
+        .test-label { font-size: 13px; color: #a78bfa; font-weight: 700; margin-bottom: 4px; display: block; }
+        
+        .ox-preview { display: flex; gap: 3px; margin-bottom: 15px; flex-wrap: wrap; }
+        .ox-dot { 
+            width: 8px; height: 8px; border-radius: 2px; 
+            background: #334155; /* Default X color (dark) */
+        }
+        .ox-dot.correct { background: #3b82f6; box-shadow: 0 0 8px rgba(59, 130, 246, 0.4); }
+        .ox-dot.wrong { background: #ef4444; opacity: 0.5; }
+
+        /* 버튼 */
+        .action-btn { 
+            width: 100%; padding: 12px; 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 12px; 
+            color: #cbd5e1; 
+            font-size: 13px; font-weight: 600; 
+            cursor: pointer; transition: 0.2s; 
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .action-btn:hover { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.2); }
+
+        /* [코멘트] */
+        .comment-box { 
+            background: rgba(59, 130, 246, 0.05); 
+            border: 1px solid rgba(59, 130, 246, 0.15); 
+            border-radius: 16px; padding: 20px; 
+            font-size: 14px; line-height: 1.6; color: #e2e8f0; 
+            white-space: pre-line;
+            position: relative;
+        }
+        .comment-box::before {
+            content: "Teacher's Note";
+            position: absolute; top: -10px; left: 20px;
+            background: var(--bg-color);
+            color: var(--brand-main);
+            font-size: 11px; font-weight: 800;
+            padding: 0 8px;
+        }
+
+        /* [모달] */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content { background: #1a1a1e; width: 100%; max-width: 600px; max-height: 85vh; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); transform: translateY(20px); transition: transform 0.3s; }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .modal-header { padding: 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; background: #202025; }
+        .modal-title { font-size: 16px; font-weight: 800; color: white; }
+        .close-btn { background: none; border: none; color: #64748b; font-size: 24px; cursor: pointer; padding: 4px; transition: color 0.2s; }
+        .close-btn:hover { color: white; }
+        .modal-body { padding: 0; overflow-y: auto; }
+
+        /* 상세 테이블 */
+        .detail-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .detail-table th { background: rgba(255,255,255,0.03); color: #94a3b8; font-weight: 700; text-align: left; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); position: sticky; top: 0; z-index: 10; white-space: nowrap; }
+        .detail-table td { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.03); color: #cbd5e1; vertical-align: top; }
+        
+        .q-num { font-weight: 700; color: #fff; font-family: 'Roboto Mono', monospace; }
+        .badge { padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; display: inline-block; margin-right: 4px; }
+        .diff-high { color: #f87171; background: rgba(248, 113, 113, 0.1); border: 1px solid rgba(248, 113, 113, 0.2); }
+        .diff-mid { color: #fb923c; background: rgba(251, 146, 60, 0.1); border: 1px solid rgba(251, 146, 60, 0.2); }
+        .diff-low { color: #60a5fa; background: rgba(96, 165, 250, 0.1); border: 1px solid rgba(96, 165, 250, 0.2); }
+        
+        .concept-text { display: block; margin-bottom: 4px; font-weight: 600; color: #e2e8f0; }
+        .comment-text { font-size: 11px; color: #94a3b8; line-height: 1.4; display: block; }
+
+        .res-o { color: #3b82f6; font-weight: 900; font-size: 16px; }
+        .res-x { color: #ef4444; font-weight: 900; font-size: 16px; opacity: 0.5; }
+
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        footer { text-align: center; font-size: 11px; color: #475569; margin-top: 50px; font-weight: 500; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+
+    <header>
+        <div>
+            <span class="sub-brand">WEEKLY REPORT</span>
+            <div class="brand">SEBIT <span>ACADEMY</span></div>
+        </div>
+        <div class="user-badge" id="headerInfo">...</div>
+    </header>
+
+    <main>
+        <!-- 1. 프로필 -->
+        <section class="profile-sec">
+            <h1 class="student-name">
+                <span id="stName">학생이름</span>
+                <span class="school-badge" id="stSchool">학교</span>
+            </h1>
+            <div class="date-info">
+                <span style="background:rgba(59,130,246,0.1); color:#60a5fa; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700;">1월 3주차</span>
+                <span>주간 학습 리포트</span>
+            </div>
+        </section>
+
+        <!-- 2. 학습 타임라인 -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon-box" style="color:var(--accent-class); background:rgba(16, 185, 129, 0.1);">
+                    <!-- Calendar Icon -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </div>
+                <div class="card-title">주간 학습 기록</div>
+            </div>
+            <div class="timeline" id="logContainer">
+                <!-- JS 로드 -->
+            </div>
+        </section>
+
+        <!-- 3. 주간 테스트 정보 (핵심) -->
+        <section class="card test-card">
+            <div class="card-header">
+                <div class="card-icon-box" style="color:var(--accent-test); background:rgba(139, 92, 246, 0.1);">
+                    <!-- FileText Icon -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                </div>
+                <div class="card-title">주간 TEST 결과</div>
+            </div>
+
+            <div style="padding: 0 10px;">
+                <span class="test-label">함수의 극한 (총 15문항)</span>
+                <div class="test-score-area">
+                    <div id="scoreDisplay" style="color:white;">
+                        <span class="score-big" id="scoreVal">--</span>
+                        <span class="score-total">/ 100점</span>
+                    </div>
+                </div>
+                
+                <!-- OX 프리뷰 -->
+                <div class="ox-preview" id="oxContainer"></div>
+
+                <button class="action-btn" onclick="openModal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    상세 분석 및 오답노트 보기
+                </button>
+            </div>
+        </section>
+
+        <!-- 4. 강사 코멘트 -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-icon-box" style="color:var(--brand-main); background:rgba(59, 130, 246, 0.1);">
+                    <!-- MessageSquare Icon -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <div class="card-title">강사 코멘트</div>
+            </div>
+            <div class="comment-box" id="commentBox">
+                <!-- JS 로드 -->
+            </div>
+        </section>
+
+        <footer>© SEBIT ACADEMY</footer>
+    </main>
+
+    <!-- 상세 모달 -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">테스트 문항별 상세 분석</h3>
+                <button class="close-btn" onclick="closeModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="detail-table">
+                    <thead style="background: #1a1a1e;">
+                        <tr>
+                            <th style="width:40px">No</th>
+                            <th>분석 내용 (난이도/유형/코멘트)</th>
+                            <th style="width:50px; text-align:center;">결과</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailTableBody">
+                        <!-- JS 로드 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 1. 데이터 정의 (User Input)
+        // ============================================================
+        
+        // 학생 정보
+        const studentInfo = {
+            name: "유채민",
+            school: "문현고",
+            grade: "2학년",
+            resultString: "XXXOXXXXXXXXXXX" // 제공된 데이터 (13자리, 패딩 예정)
+        };
+
+        // 주간 학습 기록
+        const studyLogs = [
+            { date: "01/14(수)", title: "1강 함수의 극한", type: "class" },
+            { date: "01/16(금)", title: "2강 함수의 극한값의 계산", type: "class" },
+            { date: "01/19(월)", title: "주간 TEST - 함수의 극한", type: "test" }
+        ];
+
+        // 테스트 문항 메타데이터
+        const testQuestions = [
+            { no:1, diff:"하", type:"함수의 극한값 구하기", comment:"그래프를 보고 특정 지점에서의 좌극한과 우극한을 읽습니다." },
+            { no:2, diff:"하", type:"0/0꼴의 극한 - 유리식", comment:"분모와 분자를 인수분해하여 0이 되는 인수를 약분합니다." },
+            { no:3, diff:"하", type:"0/0꼴의 극한 - 무리식", comment:"근호가 포함된 식을 유리화하여 극한값을 계산합니다." },
+            { no:4, diff:"중하", type:"함수의 극한값의 존재", comment:"구간별로 정의된 함수에서 좌극한과 우극한이 같음을 이용합니다." },
+            { no:5, diff:"중하", type:"함수의 극한값의 존재", comment:"그래프의 불연속점, 구멍 뚫린 점 등에서 극한값 존재 여부를 판단합니다." },
+            { no:6, diff:"중하", type:"절댓값 기호를 포함한 함수의 극한", comment:"절댓값이나 구간이 나뉜 식에서 좌/우 극한을 각각 구합니다." },
+            { no:7, diff:"중하", type:"함수의 극한에 대한 성질", comment:"주어진 극한꼴을 만들기 위해 식 전체를 변수 x로 나눕니다." },
+            { no:8, diff:"중하", type:"무한대/무한대 꼴의 극한", comment:"음의 무한대로 갈 때 치환을 통해 부호 실수를 유도하는 유형입니다." },
+            { no:9, diff:"중하", type:"무한대-무한대 꼴의 극한", comment:"무한대 마이너스 무한대 꼴의 무리식을 유리화하여 최고차항을 비교합니다." },
+            { no:10, diff:"중하", type:"무한대X0 꼴의 극한", comment:"음의 무한대 조건과 통분, 유리화가 복합된 고난도 계산 문제입니다." },
+            { no:11, diff:"중하", type:"무한대X0 꼴의 극한", comment:"괄호 안의 식을 통분하고 정리하여 0이 되는 요소를 찾아냅니다." },
+            { no:12, diff:"중하", type:"미정계수의 결정", comment:"극한값이 존재하고 분자가 0으로 갈 때 분모도 0임을 이용합니다." },
+            { no:13, diff:"중하", type:"다항함수의 결정", comment:"무한대 극한으로 차수를, 상수 극한으로 계수를 결정하는 전형적인 4점 유형입니다." },
+            { no:14, diff:"중", type:"합성함수의 극한", comment:"합성함수 극한에서 안쪽 함수의 방향성(위/아래)까지 고려해야 합니다." },
+            { no:15, diff:"중", type:"미정계수의 결정", comment:"미정계수 결정법을 사용하여 무리식의 미지수와 극한값을 구합니다." }
+        ];
+
+        // 강사 코멘트 (정중하고 세심한 어투)
+        const teacherComment = `채민 학생은 차분하고 신중한 성향을 지니고 있습니다. 아직은 모르는 부분에 대해 질문하는 것을 다소 조심스러워하는 모습이 보입니다.\n\n시간이 지나며 학원 분위기에 익숙해지면 자연스럽게 좋아질 것으로 생각됩니다만, 채민이가 조금 더 편안한 마음으로 학습할 수 있도록 제가 먼저 다가가 세심히 살피겠습니다. 가정에서도 많은 격려 부탁드립니다.`;
+
+
+        // ============================================================
+        // 2. 로직 처리 및 렌더링
+        // ============================================================
+
+        // [초기화] 헤더 및 프로필
+        document.getElementById('headerInfo').innerText = `${studentInfo.name} | ${studentInfo.school}`;
+        document.getElementById('stName').innerText = studentInfo.name;
+        document.getElementById('stSchool').innerText = `${studentInfo.school} ${studentInfo.grade}`;
+        document.getElementById('commentBox').innerText = teacherComment;
+
+        // [타임라인 렌더링]
+        const logContainer = document.getElementById('logContainer');
+        studyLogs.forEach(log => {
+            const isTest = log.type === 'test';
+            const dotColor = isTest ? 'var(--accent-test)' : 'var(--accent-class)';
+            const titleColor = isTest ? 'var(--accent-test)' : 'white';
+            
+            const html = `
+                <div class="timeline-item" style="border-left-color:${isTest ? 'rgba(139, 92, 246, 0.2)' : 'var(--timeline-line)'}">
+                    <div class="timeline-dot" style="border-color:${dotColor}"></div>
+                    <span class="log-date">${log.date}</span>
+                    <div class="log-title" style="color:${titleColor}">${log.title}</div>
+                    <div class="log-desc">${isTest ? '주간 학습 성취도 평가' : '정규 수업 및 개념 정리'}</div>
+                </div>
+            `;
+            logContainer.insertAdjacentHTML('beforeend', html);
+        });
+
+        // [점수 계산 및 정오표 처리]
+        // 제공된 데이터 길이가 13이므로, 15문항에 맞춰 X(오답)으로 패딩 처리
+        let rawResult = studentInfo.resultString;
+        while (rawResult.length < 15) {
+            rawResult += 'X';
+        }
+
+        let correctCount = 0;
+        const totalCount = 15;
+        
+        // OX 프리뷰 및 상세 데이터 매핑
+        const oxContainer = document.getElementById('oxContainer');
+        const detailTableBody = document.getElementById('detailTableBody');
+
+        testQuestions.forEach((q, index) => {
+            const resultChar = rawResult[index]; // 'O' or 'X'
+            const isCorrect = resultChar === 'O';
+            if (isCorrect) correctCount++;
+
+            // 1. OX Preview Dot 생성
+            const dot = document.createElement('div');
+            dot.className = `ox-dot ${isCorrect ? 'correct' : 'wrong'}`;
+            dot.title = `Q${q.no}: ${isCorrect ? '정답' : '오답'}`;
+            oxContainer.appendChild(dot);
+
+            // 2. 난이도 배지 클래스 설정
+            let diffClass = 'diff-mid';
+            if(q.diff === '하' || q.diff === '중하') diffClass = 'diff-low';
+            if(q.diff === '상' || q.diff === '중상') diffClass = 'diff-high';
+
+            // 3. 모달 테이블 Row 생성
+            const rowHtml = `
+                <tr>
+                    <td class="q-num">${q.no}</td>
+                    <td>
+                        <span class="badge ${diffClass}">${q.diff}</span>
+                        <span class="concept-text">${q.type}</span>
+                        <span class="comment-text">${q.comment}</span>
+                    </td>
+                    <td style="text-align:center;">
+                        <span class="${isCorrect ? 'res-o' : 'res-x'}">${isCorrect ? 'O' : 'X'}</span>
+                    </td>
+                </tr>
+            `;
+            detailTableBody.insertAdjacentHTML('beforeend', rowHtml);
+        });
+
+        // 점수 렌더링 (100점 만점 환산)
+        const finalScore = Math.round((correctCount / totalCount) * 100);
+        const scoreEl = document.getElementById('scoreVal');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        
+        scoreEl.innerText = finalScore;
+        
+        // 점수에 따른 색상 변화
+        if(finalScore >= 80) scoreDisplay.style.color = 'var(--status-blue)';
+        else if(finalScore >= 60) scoreDisplay.style.color = 'var(--status-orange)';
+        else scoreDisplay.style.color = 'var(--status-red)';
+
+
+        // [모달 제어]
+        const modal = document.getElementById('detailModal');
+        function openModal() { modal.classList.add('active'); }
+        function closeModal() { modal.classList.remove('active'); }
+        
+        // 배경 클릭 시 닫기
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+    </script>
+<script>
+  // 1. 마우스 우클릭 방지
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); // 우클릭 메뉴가 뜨지 않게 합니다.
+    // alert('보안을 위해 우클릭을 사용할 수 없습니다.'); // 경고창이 필요하면 주석(//)을 지우세요.
+  });
+
+  // 2. 개발자 도구 및 소스 보기 단축키 방지
+  document.addEventListener('keydown', function(e) {
+    // F12 키 방지 (가장 많이 쓰는 개발자 도구 키)
+    if (e.keyCode === 123) {
+      e.preventDefault();
+      e.returnValue = false;
+    }
+
+    // Ctrl+Shift+I (개발자 도구) / Ctrl+Shift+J (콘솔) / Ctrl+Shift+C (요소 검사)
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+      e.preventDefault();
+      e.returnValue = false;
+    }
+
+    // Ctrl+U (소스 보기)
+    if (e.ctrlKey && e.keyCode === 85) {
+      e.preventDefault();
+      e.returnValue = false;
+    }
+  });
+</script>
+</body>
+</html>
