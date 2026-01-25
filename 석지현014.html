@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>석지현 학생 1월 4주차 주간 리포트 - 우독학원 & 한호빈 수학</title>
+    <!-- Google Fonts: Pretendard (Substitute with Noto Sans KR) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* [Theme Variables: Cyber Dark] */
+        :root {
+            --bg-color: #030305;
+            --surface-color: #0f0f12;
+            --surface-hover: #16161a;
+            --border-color: #27272a;
+            
+            --primary-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+
+            /* Accent Colors */
+            --accent-daesu: #60a5fa;   /* Bright Blue */
+            --accent-mijuk: #c084fc;   /* Bright Violet */
+            --accent-dam: #fb7185;     /* Bright Rose */
+            
+            /* Status Colors */
+            --status-good: #34d399;    /* Emerald */
+            --status-warn: #fbbf24;    /* Amber */
+            --status-bad: #ef4444;     /* Red */
+            --status-none: #52525b;    /* Zinc for 'Not Taken' */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.1), transparent 40%);
+            color: var(--text-main);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            padding: 30px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+
+        /* --- Header Section --- */
+        header {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .brand-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .brand-logo {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            color: transparent;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .brand-logo::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+
+        .report-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-top: 5px;
+        }
+        
+        .report-meta {
+            color: var(--text-muted);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .student-profile {
+            text-align: right;
+        }
+        .student-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            backdrop-filter: blur(5px);
+        }
+        .student-name { color: #fff; }
+        .school-name { color: var(--text-muted); font-size: 0.85em; margin-right: 5px; }
+
+        /* --- Layout Grid --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1.8fr; /* Left: Feedback, Right: Log */
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid, .test-grid { grid-template-columns: 1fr; }
+            header { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .student-profile { text-align: left; }
+        }
+
+        /* --- Glass Cards --- */
+        .glass-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- Section Titles inside cards --- */
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        
+        .accent-bar { width: 4px; height: 18px; border-radius: 2px; }
+
+        /* --- Feedback Section --- */
+        .feedback-item {
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.03);
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 2px solid var(--border-color);
+        }
+        .feedback-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .feedback-text { font-size: 0.95rem; line-height: 1.6; color: #e2e8f0; }
+
+        /* --- Daily Log Table --- */
+        .log-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .log-table th { 
+            text-align: left; color: var(--text-muted); 
+            padding-bottom: 12px; border-bottom: 1px solid var(--border-color);
+            font-weight: 500;
+        }
+        .log-table td { padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
+        
+        .date-tag {
+            font-family: 'Outfit', monospace; font-size: 0.85rem; color: var(--text-muted);
+        }
+        .subject-tag {
+            display: block; font-weight: 600; margin-bottom: 2px;
+        }
+        .sub-desc { font-size: 0.8em; color: var(--text-muted); }
+
+        .clinic-pill {
+            padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;
+        }
+        .pill-done { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }
+        .pill-weak { background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
+        .pill-absent { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+        /* --- Dot Indicators --- */
+        .dot-container { display: flex; gap: 4px; align-items: center; }
+        .dot { 
+            width: 8px; height: 8px; border-radius: 50%; 
+            background: #27272a; transition: all 0.2s; 
+        }
+        .dot.o { background: var(--status-good); box-shadow: 0 0 6px rgba(52, 211, 153, 0.6); }
+        .dot.x { background: var(--status-bad); }
+        .dot.n { background: #3f3f46; opacity: 0.5; } /* 미응시 */
+
+        /* --- Test Score Cards --- */
+        .score-card { text-align: center; padding-top: 30px; padding-bottom: 30px; }
+        .score-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+        .score-rank {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.05);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        
+        .progress-track {
+            width: 100%; height: 6px; background: #27272a; border-radius: 3px; overflow: hidden; margin-top: 15px;
+        }
+        .progress-bar { height: 100%; border-radius: 3px; box-shadow: 0 0 10px currentColor; }
+
+        .btn-view-detail {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .btn-view-detail:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            border-color: rgba(255,255,255,0.3);
+        }
+        .btn-view-detail:disabled {
+            opacity: 0.5; cursor: not-allowed;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="brand-group">
+            <div class="brand-logo">우독학원 & 한호빈 수학</div>
+            <div class="report-title">
+                <span class="report-meta">2026 윈터스쿨</span>
+                <h1>1월 4주차 주간 리포트</h1>
+            </div>
+        </div>
+        <div class="student-profile">
+            <div class="student-badge">
+                <span class="school-name">백석고</span>
+                <span class="student-name">석지현</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Main Grid -->
+    <div class="dashboard-grid">
+        <!-- 1. Total Feedback -->
+        <div class="glass-card">
+            <div class="card-header">
+                <div class="accent-bar" style="background: var(--status-good);"></div>
+                종합 피드백
+            </div>
+            <div class="feedback-item">
+                <span class="feedback-label" style="color: var(--accent-daesu);">과목별 성취</span>
+                <div class="feedback-text">
+                    대수와 미적분 모두 평소 수업 이해도는 높으나, 이번 주 <span style="color:var(--status-warn);">월요일(접선의 방정식/평균값 정리)</span> 학습 내용에 대한 추가적인 복습이 필요합니다.
+                </div>
+            </div>
+            <div class="feedback-item">
+                <span class="feedback-label" style="color: var(--text-muted);">학습 태도 및 특이사항</span>
+                <div class="feedback-text">
+                    쾌활한 성격으로 수업 분위기를 밝게 만들며 적극적으로 참여합니다. 다만 이번 주 <span style="color:var(--status-warn);">주간 클리닉 결석</span>으로 인해 주간 테스트를 응시하지 못했습니다. 다음 주에는 일정 관리에 유의 바랍니다.
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Daily Logs -->
+        <div class="glass-card">
+            <div class="card-header">
+                <div class="accent-bar" style="background: var(--text-main);"></div>
+                일일 학습 기록
+            </div>
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th width="15%">날짜</th>
+                        <th width="35%">과목/내용</th>
+                        <th width="15%">클리닉</th>
+                        <th>일일 테스트</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="date-tag">01.19 (월)</div></td>
+                        <td>
+                            <span class="subject-tag">미적분1</span>
+                            <span class="sub-desc">접선의 방정식과 평균값 정리</span>
+                        </td>
+                        <td><span class="clinic-pill pill-weak">미흡</span></td>
+                        <td><span style="font-size:0.8rem; color:var(--text-muted)">미응시</span></td>
+                    </tr>
+                    <tr>
+                        <td><div class="date-tag">01.20 (화)</div></td>
+                        <td>
+                            <span class="subject-tag" style="color:var(--accent-daesu)">대수</span>
+                            <span class="sub-desc">지수함수의 활용</span>
+                        </td>
+                        <td><span class="clinic-pill pill-done">완료</span></td>
+                        <td>
+                            <div class="dot-container">
+                                <!-- 1,1,1,1,0,1,1,0,0,0,1 -->
+                                <div class="dot o"></div><div class="dot o"></div><div class="dot o"></div><div class="dot o"></div><div class="dot x"></div>
+                                <div class="dot o"></div><div class="dot o"></div><div class="dot x"></div><div class="dot x"></div><div class="dot x"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="date-tag">01.21 (수)</div></td>
+                        <td>
+                            <span class="subject-tag">미적분1</span>
+                            <span class="sub-desc">함수의 그래프</span>
+                        </td>
+                        <td><span class="clinic-pill pill-done">완료</span></td>
+                        <td>
+                            <div class="dot-container">
+                                <!-- 1,1,1,0,1,1,1,0,1,1,1 -->
+                                <div class="dot o"></div><div class="dot o"></div><div class="dot o"></div><div class="dot x"></div><div class="dot o"></div>
+                                <div class="dot o"></div><div class="dot o"></div><div class="dot x"></div><div class="dot o"></div><div class="dot o"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="date-tag">01.22 (목)</div></td>
+                        <td>
+                            <span class="subject-tag" style="color:var(--accent-daesu)">대수</span>
+                            <span class="sub-desc">로그함수의 활용</span>
+                        </td>
+                        <td><span class="clinic-pill pill-done">완료</span></td>
+                        <td>
+                            <div class="dot-container">
+                                <!-- 1,1,1,1,1,1,1,1,1,0,1 -->
+                                <div class="dot o"></div><div class="dot o"></div><div class="dot o"></div><div class="dot o"></div><div class="dot o"></div>
+                                <div class="dot o"></div><div class="dot o"></div><div class="dot o"></div><div class="dot o"></div><div class="dot x"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Test Scores Grid -->
+    <div class="test-grid">
+        <!-- Daesu -->
+        <div class="glass-card score-card">
+            <div class="card-header" style="justify-content:center; margin-bottom:10px;">
+                <span style="color:var(--accent-daesu)">대수 TEST</span>
+            </div>
+            <div class="score-val" style="color:var(--status-none); font-size: 1.8rem;">미응시</div>
+            <div class="score-rank">-</div>
+            <div class="test-info" style="font-size:0.85rem; color:var(--text-muted)">
+                클리닉 결석
+            </div>
+            <div class="progress-track">
+                <div class="progress-bar" style="width: 0%; background: var(--status-none);"></div>
+            </div>
+            <button class="btn-view-detail" disabled>상세 분석 없음</button>
+        </div>
+
+        <!-- Mijuk -->
+        <div class="glass-card score-card">
+            <div class="card-header" style="justify-content:center; margin-bottom:10px;">
+                <span style="color:var(--accent-mijuk)">미적분 TEST</span>
+            </div>
+            <div class="score-val" style="color:var(--status-none); font-size: 1.8rem;">미응시</div>
+            <div class="score-rank">-</div>
+            <div class="test-info" style="font-size:0.85rem; color:var(--text-muted)">
+                클리닉 결석
+            </div>
+            <div class="progress-track">
+                <div class="progress-bar" style="width: 0%; background: var(--status-none);"></div>
+            </div>
+            <button class="btn-view-detail" disabled>상세 분석 없음</button>
+        </div>
+
+        <!-- Damgeumjil -->
+        <div class="glass-card score-card">
+            <div class="card-header" style="justify-content:center; margin-bottom:10px;">
+                <span style="color:var(--accent-dam)">담금질 (심화)</span>
+            </div>
+            <div class="score-val" style="color:var(--status-none); font-size: 1.8rem;">미응시</div>
+            <div class="score-rank">-</div>
+            <div class="test-info" style="font-size:0.85rem; color:var(--text-muted)">
+                클리닉 결석
+            </div>
+            <div class="progress-track">
+                <div class="progress-bar" style="width: 0%; background: var(--status-none);"></div>
+            </div>
+            <button class="btn-view-detail" disabled>상세 분석 없음</button>
+        </div>
+    </div>
+</div>
+<script>
+  // 1. 마우스 우클릭 방지
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); // 우클릭 메뉴가 뜨지 않게 합니다.
+    // alert('보안을 위해 우클릭을 사용할 수 없습니다.'); // 경고창이 필요하면 주석(//)을 지우세요.
+  });
+
+  // 2. 개발자 도구 및 소스 보기 단축키 방지
+  document.addEventListener('keydown', function(e) {
+    // F12 키 방지 (가장 많이 쓰는 개발자 도구 키)
+    if (e.keyCode === 123) {
+      e.preventDefault();
+      e.returnValue = false;
+    }
+
+    // Ctrl+Shift+I (개발자 도구) / Ctrl+Shift+J (콘솔) / Ctrl+Shift+C (요소 검사)
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+      e.preventDefault();
+      e.returnValue = false;
+    }
+
+    // Ctrl+U (소스 보기)
+    if (e.ctrlKey && e.keyCode === 85) {
+      e.preventDefault();
+      e.returnValue = false;
+    }
+  });
+</script>
+</body>
+</html>
