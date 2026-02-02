@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장하람 학생 1월 5주차 주간 리포트 - 우독학원 & 한호빈 수학</title>
+    <!-- Google Fonts: Pretendard (Substitute with Noto Sans KR for wide compatibility) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* [Theme Variables: Cyber Dark] */
+        :root {
+            --bg-color: #030305;
+            --surface-color: #0f0f12;
+            --surface-hover: #16161a;
+            --border-color: #27272a;
+            
+            --primary-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+
+            /* Accent Colors */
+            --accent-daesu: #60a5fa;   /* Bright Blue */
+            --accent-mijuk: #c084fc;   /* Bright Violet */
+            --accent-dam: #fb7185;     /* Bright Rose */
+            
+            /* Status Colors */
+            --status-good: #34d399;    /* Emerald */
+            --status-warn: #fbbf24;    /* Amber */
+            --status-bad: #ef4444;     /* Red */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15), transparent 40%);
+            color: var(--text-main);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            padding: 30px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+
+        /* --- Header Section --- */
+        header {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .brand-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .brand-logo {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            color: transparent;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .brand-logo::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+
+        .report-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-top: 5px;
+        }
+        
+        .report-meta {
+            color: var(--text-muted);
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        .student-profile {
+            text-align: right;
+        }
+        .student-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            backdrop-filter: blur(5px);
+        }
+        .student-name { color: #fff; }
+        .school-name { color: var(--text-muted); font-size: 0.85em; margin-right: 5px; }
+
+        /* --- Layout Grid --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1.8fr; /* Left: Feedback, Right: Log */
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 Columns Layout */
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid, .test-grid { grid-template-columns: 1fr; }
+            header { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .student-profile { text-align: left; }
+        }
+
+        /* --- Glass Cards --- */
+        .glass-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- Section Titles inside cards --- */
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        
+        .accent-bar { width: 4px; height: 18px; border-radius: 2px; }
+
+        /* --- Feedback Section --- */
+        .feedback-item {
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.03);
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 2px solid var(--border-color);
+        }
+        .feedback-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .feedback-text { font-size: 0.95rem; line-height: 1.6; color: #e2e8f0; }
+
+        /* --- Daily Log Table --- */
+        .log-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .log-table th { 
+            text-align: left; color: var(--text-muted); 
+            padding-bottom: 12px; border-bottom: 1px solid var(--border-color);
+            font-weight: 500;
+        }
+        .log-table td { padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
+        
+        .date-tag {
+            font-family: 'Outfit', monospace; font-size: 0.85rem; color: var(--text-muted);
+        }
+        .subject-tag {
+            display: block; font-weight: 600; margin-bottom: 2px;
+        }
+        .sub-desc { font-size: 0.8em; color: var(--text-muted); }
+
+        .clinic-pill {
+            padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;
+        }
+        .pill-done { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }
+        .pill-weak { background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
+        .pill-absent { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .pill-warn { border-color:var(--status-warn); color:var(--status-warn); background:rgba(251,191,36,0.1); border: 1px solid rgba(251, 191, 36, 0.3); }
+        
+        .daily-score {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            color: #fff;
+        }
+        .score-detail {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: normal;
+            margin-top: 2px;
+        }
+
+        /* --- Test Score Cards --- */
+        .score-card { text-align: center; padding-top: 30px; padding-bottom: 30px; }
+        .score-val {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 5px;
+            color: #fff;
+            letter-spacing: -1px;
+        }
+        .score-rank {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.05);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        
+        .progress-track {
+            width: 100%; height: 6px; background: #27272a; border-radius: 3px; overflow: hidden; margin-top: 15px;
+        }
+        .progress-bar { height: 100%; border-radius: 3px; box-shadow: 0 0 10px currentColor; }
+        
+        .no-test-notice {
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+            line-height: 1.5;
+            text-align: left;
+            word-break: keep-all;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="brand-group">
+            <div class="brand-logo">우독학원 & 한호빈 수학</div>
+            <div class="report-title">
+                <span class="report-meta">2026 윈터스쿨</span>
+                <h1>1월 5주차 주간 리포트</h1>
+            </div>
+        </div>
+        <div class="student-profile">
+            <div class="student-badge">
+                <span class="school-name">검단고</span>
+                <span class="student-name">장하람</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Main Grid -->
+    <div class="dashboard-grid">
+        <!-- 1. Total Feedback -->
+        <div class="glass-card">
+            <div class="card-header">
+                <div class="accent-bar" style="background: var(--status-good);"></div>
+                종합 피드백
+            </div>
+            <div class="feedback-item">
+                <span class="feedback-label" style="color: var(--accent-daesu);">주간 총평</span>
+                <div class="feedback-text">
+                    성실하게 학습에 임하고 있으며 대부분의 유형 해결이 가능합니다. 다만 <strong style="color:var(--status-warn)">디테일이 부족하여 함정 문제</strong>에 당하기 쉬우므로 꼼꼼한 접근이 필요합니다.
+                </div>
+            </div>
+            <div class="feedback-item">
+                <span class="feedback-label" style="color: var(--status-info);">2월 학습 계획</span>
+                <div class="feedback-text">
+                    • <strong>대수:</strong> 삼각함수, 수열 학습<br>
+                    • <strong>미적분:</strong> 도함수의 활용, 적분 학습
+                </div>
+            </div>
+            <div class="feedback-item">
+                <span class="feedback-label" style="color: #fff;">호빈T's Comment</span>
+                <div class="feedback-text" style="font-size: 0.92rem;">
+                    <div style="margin-bottom: 5px;">
+                        <span style="color:var(--accent-daesu); font-weight:700;">• 대수:</span> 
+                        3월부터 심화 개념/학습으로 완성도 향상 예정
+                    </div>
+                    <div>
+                        <span style="color:var(--accent-mijuk); font-weight:700;">• 미적분:</span> 
+                        여름방학 유형 복습 및 학기 중 심화 학습으로 실력 완성 가능
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Daily Logs -->
+        <div class="glass-card">
+            <div class="card-header">
+                <div class="accent-bar" style="background: var(--text-main);"></div>
+                일일 학습 기록
+            </div>
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th width="15%">날짜</th>
+                        <th width="55%">과목 및 학습 내용</th>
+                        <th width="15%">상태</th>
+                        <th width="15%">테스트</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="date-tag">01.26 (월)</div></td>
+                        <td>
+                            <span class="subject-tag">미적분1</span>
+                            <span class="sub-desc">함수의 그래프</span>
+                        </td>
+                        <td><span class="clinic-pill pill-done">완료</span></td>
+                        <td>
+                            <span class="daily-score">90점</span>
+                            <span class="score-detail" style="color:var(--status-warn)">(케이스 누락)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="date-tag">01.27 (화)</div></td>
+                        <td>
+                            <span class="subject-tag" style="color:var(--accent-daesu)">대수 & 미적분</span>
+                            <span class="sub-desc">지수/로그 유형 및 <strong style="color:var(--status-info)">심화 학습</strong></span>
+                        </td>
+                        <td><span class="clinic-pill pill-done">완료</span></td>
+                        <td><span style="font-size:0.8rem; color:var(--text-muted)">-</span></td>
+                    </tr>
+                    <tr>
+                        <td><div class="date-tag">01.28 (수)</div></td>
+                        <td>
+                            <span class="subject-tag">미적분1</span>
+                            <span class="sub-desc">미분계수와 도함수 유형 및 <strong style="color:var(--status-info)">심화 학습</strong></span>
+                        </td>
+                        <td><span class="clinic-pill pill-done">완료</span></td>
+                        <td><span style="font-size:0.8rem; color:var(--text-muted)">-</span></td>
+                    </tr>
+                    <tr>
+                        <td><div class="date-tag">01.29 (목)</div></td>
+                        <td>
+                            <span class="subject-tag" style="color:var(--accent-daesu)">대수</span>
+                            <span class="sub-desc">지수함수와 로그함수 유형 학습</span>
+                        </td>
+                        <td><span class="clinic-pill pill-done">완료</span></td>
+                        <td><span style="font-size:0.8rem; color:var(--text-muted)">-</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Review Status Cards -->
+    <div class="test-grid">
+        <!-- Daesu Review -->
+        <div class="glass-card score-card">
+            <div class="card-header" style="justify-content:center; margin-bottom:10px;">
+                <span style="color:var(--accent-daesu)">대수 총평</span>
+            </div>
+            <div class="score-val" style="color:var(--accent-daesu); font-size: 2rem;">심화 가능</div>
+            <div class="score-rank">상위권 도약</div>
+            <div class="test-info" style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">
+                대부분의 심화 유형 해결 가능
+            </div>
+            <div class="progress-track">
+                <div class="progress-bar" style="width: 90%; background: var(--accent-daesu);"></div>
+            </div>
+            <div class="no-test-notice">
+                현재 이해도가 매우 높습니다. 3월부터 심화 개념 학습을 통해 완성도를 극대화할 계획입니다.
+            </div>
+        </div>
+
+        <!-- Mijuk Review -->
+        <div class="glass-card score-card">
+            <div class="card-header" style="justify-content:center; margin-bottom:10px;">
+                <span style="color:var(--accent-mijuk)">미적분 총평</span>
+            </div>
+            <div class="score-val" style="color:var(--accent-mijuk); font-size: 2rem;">유형 보완</div>
+            <div class="score-rank">개념 다지기</div>
+            <div class="test-info" style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">
+                심화 학습 전 완성도 필요
+            </div>
+            <div class="progress-track">
+                <div class="progress-bar" style="width: 70%; background: var(--accent-mijuk);"></div>
+            </div>
+            <div class="no-test-notice">
+                대부분 이해하고 있으나 심화를 위해선 개념의 완벽한 숙지가 선행되어야 합니다. 여름방학 복습을 통해 보완 예정입니다.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  // 1. 마우스 우클릭 방지
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); 
+  });
+
+  // 2. 개발자 도구 및 소스 보기 단축키 방지
+  document.addEventListener('keydown', function(e) {
+    if (e.keyCode === 123) {
+      e.preventDefault();
+      e.returnValue = false;
+    }
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+      e.preventDefault();
+      e.returnValue = false;
+    }
+    if (e.ctrlKey && e.keyCode === 85) {
+      e.preventDefault();
+      e.returnValue = false;
+    }
+  });
+</script>
+<script>
+  // 1. 마우스 우클릭 방지
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); // 우클릭 메뉴가 뜨지 않게 합니다.
+    // alert('보안을 위해 우클릭을 사용할 수 없습니다.'); // 경고창이 필요하면 주석(//)을 지우세요.
+  });
+
+  // 2. 개발자 도구 및 소스 보기 단축키 방지
+  document.addEventListener('keydown', function(e) {
+    // F12 키 방지 (가장 많이 쓰는 개발자 도구 키)
+    if (e.keyCode === 123) {
+      e.preventDefault();
+      e.returnValue = false;
+    }
+
+    // Ctrl+Shift+I (개발자 도구) / Ctrl+Shift+J (콘솔) / Ctrl+Shift+C (요소 검사)
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+      e.preventDefault();
+      e.returnValue = false;
+    }
+
+    // Ctrl+U (소스 보기)
+    if (e.ctrlKey && e.keyCode === 85) {
+      e.preventDefault();
+      e.returnValue = false;
+    }
+  });
+</script>
+</body>
+</html>
